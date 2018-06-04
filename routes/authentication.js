@@ -4,9 +4,6 @@ const User= require('../models/user');
 module.exports = (router) => {
 
     router.post('/register',(req,res) =>{
-        // req.body.email
-        // req.body.username
-        // req.body.password
         if(!req.body.email)
         {
             res.json({success: false, message: 'You must provide an e-mail'});
@@ -52,10 +49,11 @@ module.exports = (router) => {
                         }
                     }
                 }
-               else{
-                   res.json({success: true, message: 'User have been saved'});
+               else {
+                   res.json({success: true, message: 'Account registered'});
                } 
             });
+            
         }
         
         
