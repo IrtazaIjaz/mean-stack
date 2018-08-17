@@ -8,6 +8,7 @@
   const config             = require('./config/database');                // Mongoose Config
   const path               = require('path');                             // NodeJS Package for file paths
   const authentication     = require('./routes/authentication')(router);
+  const blogs              = require('./routes/blogs')(router);
   const bodyParser         = require('body-parser');
   const cors               = require('cors');
 
@@ -33,6 +34,7 @@ app.use(bodyParser.json());
 // Provide static directory for frontend
 app.use(express.static(__dirname + '/client/dist/client'));
 app.use('/authentication', authentication);
+app.use('/blogs', blogs);
 
 // Connect server to Angular 2 Index.html
 app.get('*', (req, res) => {
