@@ -16,12 +16,17 @@ export class BlogComponent implements OnInit {
   message;
   newPost=false;
   form: FormGroup;
+  commentForm: FormGroup;
   loadingBlogs=false;
   processing=false;
   username;
+  blogPosts;
+  enabledComments=[];
+  newComment=[];
 
   constructor(private formBuilder: FormBuilder, private _router: Router, private _auth: AuthService, private _blog: BlogService ) { 
     this.createNewBlogForm();
+    this.createCommentForm();
   }
 
   createNewBlogForm() {
@@ -37,12 +42,6 @@ export class BlogComponent implements OnInit {
         Validators.minLength(5),
         Validators.maxLength(500)
     ])]
-  //   ,
-  //   comment: ['', Validators.compose([
-  //     Validators.required,
-  //     Validators.minLength(1),
-  //     Validators.maxLength(200)
-  // ])]
     });
   }
 
@@ -55,16 +54,20 @@ export class BlogComponent implements OnInit {
     }
   }
   
-  disableForm() {
-    this.form.controls['title'].disable();
+  disableCommentForm() {
+    this.commentForm.get('comment').disable();
   }
+  enableCommentForm() {
+    this.commentForm.get('comment').enable();
+  }
+
   enableForm() {
     this.form.controls['title'].enable();
   }
 
   onBlogSubmit() {
     this.processing=true;
-    this.disableForm();
+    // this.disableCommentForm();
 
     const blog= {
       title: this.form.get('title').value,
@@ -82,6 +85,7 @@ export class BlogComponent implements OnInit {
       else {
         this.messageClass = "alert alert-success";
         this.message=data.message; 
+        this.getAllBlogs();
         setTimeout(() => {
           this.newPost=false;
           this.processing=false;
@@ -97,6 +101,8 @@ export class BlogComponent implements OnInit {
     this._auth.getProfile().subscribe(profile => {
       this.username= profile.user.username;
     });
+    
+    this.getAllBlogs();
   }
 
   newBlogForm() {
@@ -104,6 +110,7 @@ export class BlogComponent implements OnInit {
   }
   readBlogs() {
     this.loadingBlogs=true;
+    this.getAllBlogs();
     setTimeout(() => {
       this.loadingBlogs=false;
     }, 4000);
@@ -113,9 +120,71 @@ export class BlogComponent implements OnInit {
     window.location.reload();
   }
 
-  draftComment() {
-    
+  getAllBlogs() {
+    this._blog.getAllBlogs().subscribe( data => {
+      this.blogPosts = data.blogs;
+    });
   }
+
+  draftComment(id) {
+    this.commentForm.reset();
+    this.newComment=[];
+    this.newComment.push(id);
+  }
+  postComment(id) {
+      this.disableCommentForm();
+      this.processing= true;
+      const comment = this.commentForm.get('comment').value;
+      this._blog.postComment(id, comment).subscribe( data =>{
+        this.getAllBlogs();
+        const index = this.newComment.indexOf(id);
+        this.newComment.splice(index,1);
+        this.enableCommentForm();
+        this.commentForm.reset();
+        this.processing=false;
+        if(this.enabledComments.indexOf(id) < 0 ) this.expand(id);
+      });
+  }
+  cancelSubmission(id) {
+    const index = this.newComment.indexOf(id);
+    this.newComment.splice(index,1);
+    this.commentForm.reset();
+    this.enableCommentForm();
+     this.processing=false;
+  }
+
+  expand(id) {
+    this.enabledComments.push(id);
+  }
+
+  collapse(id) {
+    const index = this.enabledComments.indexOf(id);
+    this.enabledComments.splice(index,1);
+  }
+
+  likeBlog(id) {
+    this._blog.likeBlog(id).subscribe( data =>{
+      this.getAllBlogs();
+    });
+  }
+
+  dislikeBlog(id) {
+    this._blog.dislikeBlog(id).subscribe( data =>{
+      this.getAllBlogs();
+    });
+  }
+
+  createCommentForm() {
+    this.commentForm = this.formBuilder.group({
+      comment: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(200)
+      ])]
+    });
+  }
+
+
 
 
 

@@ -11,6 +11,7 @@
   const blogs              = require('./routes/blogs')(router);
   const bodyParser         = require('body-parser');
   const cors               = require('cors');
+  const port               = process.env.PORT || 8080;
 
 // // Database Connection
 mongoose.Promise = global.Promise;
@@ -32,16 +33,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Provide static directory for frontend
-app.use(express.static(__dirname + '/client/dist/client'));
+app.use(express.static(__dirname + '/public'));
 app.use('/authentication', authentication);
 app.use('/blogs', blogs);
 
 // Connect server to Angular 2 Index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/dist/client/index.html'));
+  res.sendFile(path.join(__dirname + '/public/index.html'));
 });
 
 // Start Server: Listen on port 8080
-app.listen(8080, () => {
-  console.log('Listening on port 8080');
+app.listen(port, () => {
+  console.log('Listening on port '+ port);
 });

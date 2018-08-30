@@ -17,6 +17,10 @@ import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 import { BlogComponent } from './components/blog/blog.component';
 import { BlogService } from './services/blog.service';
+import {FormsModule} from '@angular/forms';
+import { EditBlogComponent } from './components/blog/edit-blog/edit-blog.component';
+import { DeleteBlogComponent } from './components/blog/delete-blog/delete-blog.component';
+import { PublicProfileComponent } from './components/public-profile/public-profile.component';
 
 @NgModule({
   declarations: [
@@ -27,13 +31,17 @@ import { BlogService } from './services/blog.service';
     RegisterComponent,
     LoginComponent,
     ProfileComponent,
-    BlogComponent
+    BlogComponent,
+    EditBlogComponent,
+    DeleteBlogComponent,
+    PublicProfileComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     AppRoutingModule,
     FlashMessagesModule.forRoot()
   ],

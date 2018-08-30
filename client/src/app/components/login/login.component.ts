@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
   message;
   messageClass;
   processing=false;
-  form: FormGroup;
+  form;
   previousUrl;
 
   constructor(private forBuilder: FormBuilder, private _auth:AuthService, private _router: Router, private authGuard:AuthGuard ) { 

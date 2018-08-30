@@ -56,9 +56,7 @@ module.exports = (router) => {
                } 
             });
             
-        }
-        
-        
+        } 
     });
 
     router.get('/checkEmail/:email', (req, res) =>{
@@ -129,6 +127,7 @@ module.exports = (router) => {
         }
     });
 
+    // MiddleWare to grap token from the headers
     router.use((req, res, next) => {
         const token = req.headers['authorization'];
         if(!token) {
