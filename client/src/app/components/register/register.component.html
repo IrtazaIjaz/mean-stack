@@ -53,7 +53,7 @@
         <li *ngIf= "(form.controls.password.errors?.minlength || form.controls.password.errors?.maxlength) && form.controls.password.dirty">
           Minimum character: 8, Maximum character: 35
         </li>
-        <li *ngIf="form.controls.password.errors?.validatePassword && form.controls.password.dirty"> This must be a valid password</li>
+        <li *ngIf="form.controls.password.errors?.validatePassword && form.controls.password.dirty"> Password must have at least one uppercase letter,alphanumeric and special character</li>
       </ul>
     </div>
   </div>
