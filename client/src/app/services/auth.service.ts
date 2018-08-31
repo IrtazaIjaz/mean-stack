@@ -9,7 +9,7 @@ export class AuthService {
   authToken;
   user;
   options;
-  domain= "http://localhost:8080/";
+  domain= "";
 
   constructor(private _http: Http) {
 
